@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp, getDocs } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDocs, writeBatch, doc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
 
@@ -33,100 +33,105 @@ export default function SetupPage() {
     setIsRunning(true);
 
     try {
-      // 1. Create Clients Collection
+      // 1. Create Clients Collection (PARALLEL)
       updateStep('clients', { status: 'running' });
 
       const clientsRef = collection(db, 'clients');
-      const client1 = await addDoc(clientsRef, {
-        name: 'Acme Corporation',
-        email: 'contact@acme.com',
-        logoUrl: '',
-        createdAt: serverTimestamp(),
-      });
 
-      const client2 = await addDoc(clientsRef, {
-        name: 'TechStart Inc.',
-        email: 'hello@techstart.com',
-        logoUrl: '',
-        createdAt: serverTimestamp(),
-      });
+      // Create both clients in parallel
+      const [client1, client2] = await Promise.all([
+        addDoc(clientsRef, {
+          name: 'Acme Corporation',
+          email: 'contact@acme.com',
+          logoUrl: '',
+          createdAt: serverTimestamp(),
+        }),
+        addDoc(clientsRef, {
+          name: 'TechStart Inc.',
+          email: 'hello@techstart.com',
+          logoUrl: '',
+          createdAt: serverTimestamp(),
+        })
+      ]);
 
       updateStep('clients', {
         status: 'completed',
         message: '2 test müşteri eklendi'
       });
 
-      // 2. Create Projects Collection
+      // 2. Create Projects Collection (PARALLEL)
       updateStep('projects', { status: 'running' });
 
       const projectsRef = collection(db, 'projects');
-      const project1 = await addDoc(projectsRef, {
-        clientId: client1.id,
-        name: 'Website Yenileme Projesi',
-        status: 'active',
-        deadline: new Date('2025-03-15'),
-        createdAt: serverTimestamp(),
-      });
 
-      const project2 = await addDoc(projectsRef, {
-        clientId: client2.id,
-        name: 'Mobil Uygulama Geliştirme',
-        status: 'active',
-        deadline: new Date('2025-04-30'),
-        createdAt: serverTimestamp(),
-      });
+      // Create both projects in parallel
+      const [project1, project2] = await Promise.all([
+        addDoc(projectsRef, {
+          clientId: client1.id,
+          name: 'Website Yenileme Projesi',
+          status: 'active',
+          deadline: new Date('2025-03-15'),
+          createdAt: serverTimestamp(),
+        }),
+        addDoc(projectsRef, {
+          clientId: client2.id,
+          name: 'Mobil Uygulama Geliştirme',
+          status: 'active',
+          deadline: new Date('2025-04-30'),
+          createdAt: serverTimestamp(),
+        })
+      ]);
 
       updateStep('projects', {
         status: 'completed',
         message: '2 test proje eklendi'
       });
 
-      // 3. Create Updates Collection
+      // 3. Create Updates Collection (PARALLEL)
       updateStep('updates', { status: 'running' });
 
       const updatesRef = collection(db, 'updates');
 
-      // Updates for project 1
-      await addDoc(updatesRef, {
-        projectId: project1.id,
-        title: 'Proje Başlangıcı',
-        description: 'Proje kickoff toplantısı yapıldı ve gereksinimler belirlendi.',
-        category: 'design',
-        createdAt: serverTimestamp(),
-      });
-
-      await addDoc(updatesRef, {
-        projectId: project1.id,
-        title: 'Tasarım Aşaması',
-        description: 'Anasayfa ve iç sayfa tasarımları tamamlandı.',
-        category: 'design',
-        createdAt: serverTimestamp(),
-      });
-
-      await addDoc(updatesRef, {
-        projectId: project1.id,
-        title: 'Frontend Geliştirme',
-        description: 'React bileşenleri kodlanmaya başlandı.',
-        category: 'dev',
-        createdAt: serverTimestamp(),
-      });
-
-      // Updates for project 2
-      await addDoc(updatesRef, {
-        projectId: project2.id,
-        title: 'UI/UX Tasarımı',
-        description: 'Mobil uygulama arayüz tasarımları hazırlandı.',
-        category: 'design',
-        createdAt: serverTimestamp(),
-      });
-
-      await addDoc(updatesRef, {
-        projectId: project2.id,
-        title: 'Backend API',
-        description: 'REST API endpoint\'leri oluşturuldu.',
-        category: 'dev',
-        createdAt: serverTimestamp(),
-      });
+      // Create all 5 updates in parallel
+      await Promise.all([
+        // Updates for project 1
+        addDoc(updatesRef, {
+          projectId: project1.id,
+          title: 'Proje Başlangıcı',
+          description: 'Proje kickoff toplantısı yapıldı ve gereksinimler belirlendi.',
+          category: 'design',
+          createdAt: serverTimestamp(),
+        }),
+        addDoc(updatesRef, {
+          projectId: project1.id,
+          title: 'Tasarım Aşaması',
+          description: 'Anasayfa ve iç sayfa tasarımları tamamlandı.',
+          category: 'design',
+          createdAt: serverTimestamp(),
+        }),
+        addDoc(updatesRef, {
+          projectId: project1.id,
+          title: 'Frontend Geliştirme',
+          description: 'React bileşenleri kodlanmaya başlandı.',
+          category: 'dev',
+          createdAt: serverTimestamp(),
+        }),
+        // Updates for project 2
+        addDoc(updatesRef, {
+          projectId: project2.id,
+          title: 'UI/UX Tasarımı',
+          description: 'Mobil uygulama arayüz tasarımları hazırlandı.',
+          category: 'design',
+          createdAt: serverTimestamp(),
+        }),
+        addDoc(updatesRef, {
+          projectId: project2.id,
+          title: 'Backend API',
+          description: 'REST API endpoint\'leri oluşturuldu.',
+          category: 'dev',
+          createdAt: serverTimestamp(),
+        })
+      ]);
 
       updateStep('updates', {
         status: 'completed',
@@ -134,7 +139,7 @@ export default function SetupPage() {
       });
 
       // Wait a bit to show success
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
 
     } catch (error) {
       console.error('Setup error:', error);
