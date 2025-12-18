@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { sendMagicLink } from '@/lib/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
+import { getUser } from '@/lib/firestore/users';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,138 +19,96 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await sendMagicLink(email);
-      setSent(true);
-    } catch (err) {
-      console.error('Error sending magic link:', err);
-      setError(err instanceof Error ? err.message : 'E-posta gönderilemedi. Lütfen tekrar deneyin.');
+      // Firebase Authentication
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = await getUser(userCredential.user.uid);
+
+      // Redirect based on role
+      if (user?.role === 'admin') {
+        router.push('/dashboard');
+      } else if (user?.role === 'client') {
+        router.push('/client/dashboard');
+      } else {
+        router.push('/');
+      }
+    } catch (err: any) {
+      console.error('Login error:', err);
+
+      // User-friendly error messages
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        setError('Email veya şifre hatalı');
+      } else if (err.code === 'auth/too-many-requests') {
+        setError('Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin.');
+      } else {
+        setError('Giriş yapılamadı. Lütfen tekrar deneyin.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  if (sent) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-bg)' }}>
-        <div
-          className="max-w-md w-full rounded-2xl p-8 text-center"
-          style={{
-            backgroundColor: 'var(--color-bg-card)',
-            border: '1px solid var(--color-border)',
-            boxShadow: 'var(--shadow-xl)',
-          }}
-        >
-          {/* Success Icon */}
-          <div
-            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-            style={{ backgroundColor: 'var(--color-success-light)' }}
-          >
-            <svg className="w-10 h-10" style={{ color: 'var(--color-success)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </div>
-
-          <h1 className="text-2xl font-bold mb-3" style={{ color: 'var(--color-text)' }}>
-            E-posta Gönderildi!
-          </h1>
-
-          <p className="mb-6" style={{ color: 'var(--color-text-secondary)' }}>
-            <strong>{email}</strong> adresine bir giriş linki gönderdik.
-            E-postanızı kontrol edin ve linke tıklayarak giriş yapın.
-          </p>
-
-          <div
-            className="rounded-xl p-4 mb-6"
-            style={{ backgroundColor: 'var(--color-primary-light)' }}
-          >
-            <p className="text-sm" style={{ color: 'var(--color-primary)' }}>
-              💡 <strong>İpucu:</strong> E-posta birkaç dakika içinde gelmezse spam klasörünüzü kontrol edin.
-            </p>
-          </div>
-
-          <button
-            onClick={() => {
-              setSent(false);
-              setEmail('');
-            }}
-            className="w-full px-6 py-3 rounded-xl font-medium transition-colors"
-            style={{
-              backgroundColor: 'var(--color-border-light)',
-              color: 'var(--color-text-secondary)',
-            }}
-          >
-            Başka E-posta ile Giriş Yap
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-bg)' }}>
-      <div
-        className="max-w-md w-full rounded-2xl p-8"
-        style={{
-          backgroundColor: 'var(--color-bg-card)',
-          border: '1px solid var(--color-border)',
-          boxShadow: 'var(--shadow-xl)',
-        }}
-      >
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
         {/* Logo & Title */}
         <div className="text-center mb-8">
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{
-              background: 'var(--gradient-primary)',
-              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)',
-            }}
-          >
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg">
             <span className="text-white font-bold text-2xl">C</span>
           </div>
-          <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+          <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">
             ClientFlow
           </h1>
-          <p style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="text-gray-600 dark:text-gray-300">
             Proje portalına giriş yapın
           </p>
+        </div>
+
+        {/* Demo Account Info */}
+        <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+          <p className="text-sm text-blue-800 dark:text-blue-300 mb-2">
+            <strong>🎯 Demo Hesaplar:</strong>
+          </p>
+          <div className="text-xs space-y-1 text-blue-700 dark:text-blue-400">
+            <p><strong>Admin:</strong> admin@clientflow.com / Admin123</p>
+            <p><strong>Client:</strong> musteri@firma.com / Musteri123</p>
+          </div>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
-              E-posta Adresi
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+              E-posta
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="ornek@sirket.com"
-              className="w-full px-4 py-3 rounded-xl transition-all focus:outline-none"
-              style={{
-                backgroundColor: 'var(--color-border-light)',
-                border: '2px solid transparent',
-                color: 'var(--color-text)',
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = 'var(--color-primary)';
-                e.currentTarget.style.backgroundColor = 'var(--color-bg-card)';
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = 'transparent';
-                e.currentTarget.style.backgroundColor = 'var(--color-border-light)';
-              }}
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border-2 border-transparent focus:border-blue-600 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-800 text-gray-900 dark:text-white transition-all outline-none"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+              Şifre
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border-2 border-transparent focus:border-blue-600 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-gray-800 text-gray-900 dark:text-white transition-all outline-none"
               required
               disabled={loading}
             />
           </div>
 
           {error && (
-            <div
-              className="rounded-xl p-4"
-              style={{ backgroundColor: 'var(--color-warning-light)' }}
-            >
-              <p className="text-sm" style={{ color: 'var(--color-warning)' }}>
+            <div className="rounded-xl p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+              <p className="text-sm text-red-800 dark:text-red-300">
                 ⚠️ {error}
               </p>
             </div>
@@ -157,11 +117,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-6 py-3 rounded-xl font-medium text-white transition-all disabled:opacity-50 hover:scale-[1.02]"
-            style={{
-              background: 'var(--gradient-primary)',
-              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)',
-            }}
+            className="w-full px-6 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -169,21 +125,18 @@ export default function LoginPage() {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
-                Gönderiliyor...
+                Giriş yapılıyor...
               </span>
             ) : (
-              'Giriş Linki Gönder'
+              'Giriş Yap'
             )}
           </button>
         </form>
 
         {/* Info */}
-        <div
-          className="mt-6 rounded-xl p-4"
-          style={{ backgroundColor: 'var(--color-border-light)' }}
-        >
-          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            🔒 <strong>Güvenli giriş:</strong> Şifre gerektirmez. E-postanıza özel bir giriş linki gönderilir.
+        <div className="mt-6 rounded-xl p-4 bg-gray-50 dark:bg-gray-700">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            🔒 Güvenli bağlantı ile giriş yapıyorsunuz
           </p>
         </div>
       </div>
