@@ -12,8 +12,8 @@ export default function Home() {
     // Test Firebase connection
     const testConnection = async () => {
       try {
-        // Try to access Firestore (even if empty)
-        const testCollection = collection(db, 'test');
+        // Try to access Firestore (check existing collections)
+        const testCollection = collection(db, 'clients');
         await getDocs(testCollection);
         setFirebaseStatus('connected');
       } catch (err) {
