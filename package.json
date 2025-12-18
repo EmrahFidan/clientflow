@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "setup:auth": "node scripts/setup-auth.js"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "firebase": "^12.6.0",
     "next": "16.0.10",
     "openai": "^6.14.0",
