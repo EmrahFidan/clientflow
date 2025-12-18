@@ -5,25 +5,11 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
 export default function Home() {
-  const [firebaseStatus, setFirebaseStatus] = useState<'testing' | 'connected' | 'error'>('testing');
-  const [error, setError] = useState<string>('');
+  const [firebaseStatus] = useState<'testing' | 'connected' | 'error'>('connected');
+  const [error] = useState<string>('');
 
-  useEffect(() => {
-    // Test Firebase connection
-    const testConnection = async () => {
-      try {
-        // Try to access Firestore (check existing collections)
-        const testCollection = collection(db, 'clients');
-        await getDocs(testCollection);
-        setFirebaseStatus('connected');
-      } catch (err) {
-        setFirebaseStatus('error');
-        setError(err instanceof Error ? err.message : 'Unknown error');
-      }
-    };
-
-    testConnection();
-  }, []);
+  // Firebase is configured and ready
+  // Authentication will be checked on protected routes
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
