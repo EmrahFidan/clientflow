@@ -1,0 +1,117 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+
+  const navLinks = [
+    { href: '/dashboard', label: 'Projeler', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+    )},
+    { href: '/dashboard/clients', label: 'Müşteriler', icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    )},
+  ];
+
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
+      {/* Navigation Bar */}
+      <nav
+        className="sticky top-0 z-50 backdrop-blur-md"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderBottom: '1px solid var(--color-border)',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <Link href="/dashboard" className="flex items-center gap-3 group">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105"
+                style={{
+                  background: 'var(--gradient-primary)',
+                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)',
+                }}
+              >
+                <span className="text-white font-bold text-xl">C</span>
+              </div>
+              <div>
+                <h1
+                  className="text-xl font-bold tracking-tight"
+                  style={{ color: 'var(--color-text)' }}
+                >
+                  ClientFlow
+                </h1>
+                <p className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                  Proje Yönetim Paneli
+                </p>
+              </div>
+            </Link>
+
+            {/* Navigation Links */}
+            <div className="flex items-center gap-2">
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href ||
+                  (link.href !== '/dashboard' && pathname?.startsWith(link.href));
+
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                    style={{
+                      backgroundColor: isActive ? 'var(--color-primary-light)' : 'transparent',
+                      color: isActive ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                    }}
+                  >
+                    {link.icon}
+                    {link.label}
+                  </Link>
+                );
+              })}
+
+              {/* Divider */}
+              <div
+                className="w-px h-8 mx-2"
+                style={{ backgroundColor: 'var(--color-border)' }}
+              />
+
+              {/* User Menu */}
+              <button
+                className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
+                style={{ backgroundColor: 'var(--color-border-light)' }}
+              >
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium text-white"
+                  style={{ backgroundColor: 'var(--color-primary)' }}
+                >
+                  A
+                </div>
+                <span
+                  className="text-sm font-medium hidden sm:block"
+                  style={{ color: 'var(--color-text)' }}
+                >
+                  Admin
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Content */}
+      <main>{children}</main>
+    </div>
+  );
+}

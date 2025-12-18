@@ -1,0 +1,73 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+
+    function getUserClientId() {
+      return getUserData().clientId;
+    }
+
+    function isOwner(clientId) {
+      return isAuthenticated() && getUserClientId() == clientId;
+    }
+
+    // USERS Collection
+    match /users/{userId} {
+      // Kullanıcılar kendi bilgilerini okuyabilir
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+
+      // Sadece admin kullanıcı oluşturabilir ve güncelleyebilir
+      allow create, update: if isAdmin();
+
+      // Hiç kimse kullanıcı silemez (güvenlik)
+      allow delete: if false;
+    }
+
+    // CLIENTS Collection
+    match /clients/{clientId} {
+      // Admin tüm erişim
+      allow read, write: if isAdmin();
+
+      // Müşteri sadece kendi bilgilerini okuyabilir
+      allow read: if isOwner(clientId);
+    }
+
+    // PROJECTS Collection
+    match /projects/{projectId} {
+      // Admin tüm erişim
+      allow read, write: if isAdmin();
+
+      // Müşteri sadece kendi projelerini okuyabilir
+      allow read: if isAuthenticated() &&
+                     resource.data.clientId == getUserClientId();
+    }
+
+    // UPDATES Collection
+    match /updates/{updateId} {
+      // Admin tüm erişim
+      allow read, write: if isAdmin();
+
+      // Müşteri güncellemeleri okuyabilir
+      // (Proje erişim kontrolü query tarafında yapılıyor)
+      allow read: if isAuthenticated();
+
+      // Müşteri sadece status field'ını güncelleyebilir (Onay/Revize)
+      allow update: if isAuthenticated() &&
+                       request.resource.data.keys().hasOnly(['status', 'reviewedAt', 'reviewedBy']) &&
+                       request.resource.data.status in ['approved', 'needs_revision'];
+    }
+  }
+}
