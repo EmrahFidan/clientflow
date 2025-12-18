@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp, getDocs } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/AuthContext';
 
 type SetupStep = {
   id: string;
@@ -14,6 +15,7 @@ type SetupStep = {
 
 export default function SetupPage() {
   const router = useRouter();
+  const { firebaseUser, loading } = useAuth();
   const [steps, setSteps] = useState<SetupStep[]>([
     { id: 'clients', name: 'Clients koleksiyonu oluştur', status: 'pending' },
     { id: 'projects', name: 'Projects koleksiyonu oluştur', status: 'pending' },
@@ -150,6 +152,41 @@ export default function SetupPage() {
 
   const allCompleted = steps.every(s => s.status === 'completed');
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-8 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-300">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Not authenticated - redirect to login
+  if (!firebaseUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-8 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-md text-center space-y-4">
+          <div className="text-6xl mb-4">🔒</div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Giriş Gerekli
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300">
+            Setup sayfasına erişmek için önce giriş yapmalısınız.
+          </p>
+          <button
+            onClick={() => router.push('/auth/login')}
+            className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+          >
+            Giriş Yap
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-8">
       <div className="max-w-2xl mx-auto">
@@ -161,6 +198,9 @@ export default function SetupPage() {
             </h1>
             <p className="text-gray-600 dark:text-gray-300">
               Firestore koleksiyonlarını ve test verilerini oluştur
+            </p>
+            <p className="text-sm text-gray-500">
+              Giriş yapıldı: {firebaseUser.email}
             </p>
           </div>
 
