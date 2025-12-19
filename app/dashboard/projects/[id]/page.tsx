@@ -110,14 +110,14 @@ export default function ProjectDetailPage() {
 
   const handleExportPDF = () => {
     if (project && client) {
-      exportProjectPDF({
-        ...project,
-        clientName: client.name,
-        updates: updates.map(u => ({
+      exportProjectPDF(
+        project,
+        client,
+        updates.map(u => ({
           ...u,
           createdAt: u.createdAt || new Date(),
-        })),
-      });
+        }))
+      );
     }
   };
 
