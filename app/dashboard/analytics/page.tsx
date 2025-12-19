@@ -131,41 +131,41 @@ export default function AnalyticsPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="rounded-2xl p-6 shadow-lg border" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Toplam Müşteri</p>
-                <p className="text-3xl font-bold text-blue-600 mt-2">{stats.totalClients}</p>
+                <p className="text-gray-300 text-sm">Toplam Müşteri</p>
+                <p className="text-3xl font-bold text-blue-400 mt-2">{stats.totalClients}</p>
               </div>
-              <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center text-2xl">
+              <div className="w-14 h-14 rounded-xl bg-blue-500 bg-opacity-20 flex items-center justify-center text-2xl">
                 👥
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="rounded-2xl p-6 shadow-lg border" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Aktif Proje</p>
-                <p className="text-3xl font-bold text-green-600 mt-2">{stats.activeProjects}</p>
-                <p className="text-xs text-gray-500 mt-1">Toplam: {stats.totalProjects}</p>
+                <p className="text-gray-300 text-sm">Aktif Proje</p>
+                <p className="text-3xl font-bold text-green-400 mt-2">{stats.activeProjects}</p>
+                <p className="text-xs text-gray-400 mt-1">Toplam: {stats.totalProjects}</p>
               </div>
-              <div className="w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center text-2xl">
+              <div className="w-14 h-14 rounded-xl bg-green-500 bg-opacity-20 flex items-center justify-center text-2xl">
                 📁
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div className="rounded-2xl p-6 shadow-lg border" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Toplam Güncelleme</p>
-                <p className="text-3xl font-bold text-purple-600 mt-2">{stats.totalUpdates}</p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-gray-300 text-sm">Toplam Güncelleme</p>
+                <p className="text-3xl font-bold text-purple-400 mt-2">{stats.totalUpdates}</p>
+                <p className="text-xs text-gray-400 mt-1">
                   Onaylı: {stats.approvedUpdates} | Bekleyen: {stats.pendingUpdates}
                 </p>
               </div>
-              <div className="w-14 h-14 rounded-xl bg-purple-100 flex items-center justify-center text-2xl">
+              <div className="w-14 h-14 rounded-xl bg-purple-500 bg-opacity-20 flex items-center justify-center text-2xl">
                 📝
               </div>
             </div>
@@ -175,8 +175,8 @@ export default function AnalyticsPage() {
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Timeline Chart */}
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800">Son 7 Gün Aktivitesi</h3>
+          <div className="rounded-2xl p-6 shadow-lg border" style={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)' }}>
+            <h3 className="text-lg font-semibold mb-4 text-white">Son 7 Gün Aktivitesi</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={timelineData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
@@ -190,8 +190,8 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Category Distribution */}
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800">Kategori Dağılımı</h3>
+          <div className="rounded-2xl p-6 shadow-lg border" style={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)' }}>
+            <h3 className="text-lg font-semibold mb-4 text-white">Kategori Dağılımı</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -215,8 +215,8 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Bar Chart */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">Durum Dağılımı</h3>
+        <div className="rounded-2xl p-6 shadow-lg border" style={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)' }}>
+          <h3 className="text-lg font-semibold mb-4 text-white">Durum Dağılımı</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
               data={[

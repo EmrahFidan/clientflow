@@ -138,8 +138,8 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div>
-              <p className="text-3xl font-bold" style={{ color: '#0f172a' }}>{projects.length}</p>
-              <p className="text-sm font-medium" style={{ color: '#64748b' }}>Toplam Proje</p>
+              <p className="text-3xl font-bold text-white">{projects.length}</p>
+              <p className="text-sm font-medium text-gray-300">Toplam Proje</p>
             </div>
           </div>
         </div>
@@ -162,8 +162,8 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div>
-              <p className="text-3xl font-bold" style={{ color: '#0f172a' }}>{activeProjects.length}</p>
-              <p className="text-sm font-medium" style={{ color: '#64748b' }}>Aktif Proje</p>
+              <p className="text-3xl font-bold text-white">{activeProjects.length}</p>
+              <p className="text-sm font-medium text-gray-300">Aktif Proje</p>
             </div>
           </div>
         </div>
@@ -186,8 +186,8 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div>
-              <p className="text-3xl font-bold" style={{ color: '#0f172a' }}>{Object.keys(clients).length}</p>
-              <p className="text-sm font-medium" style={{ color: '#64748b' }}>Müşteri</p>
+              <p className="text-3xl font-bold text-white">{Object.keys(clients).length}</p>
+              <p className="text-sm font-medium text-gray-300">Müşteri</p>
             </div>
           </div>
         </div>
