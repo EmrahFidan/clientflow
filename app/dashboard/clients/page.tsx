@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import NewClientForm from '@/components/dashboard/NewClientForm';
 
 type Client = {
   id: string;
@@ -18,9 +19,9 @@ type Client = {
 export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showNewClientForm, setShowNewClientForm] = useState(false);
 
-  useEffect(() => {
-    const fetchClients = async () => {
+  const fetchClients = async () => {
       try {
         setLoading(true);
 
@@ -59,6 +60,7 @@ export default function ClientsPage() {
       }
     };
 
+  useEffect(() => {
     fetchClients();
   }, []);
 
@@ -88,6 +90,19 @@ export default function ClientsPage() {
             Toplam {clients.length} müşteri
           </p>
         </div>
+        <button
+          onClick={() => setShowNewClientForm(true)}
+          className="flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-white transition-all hover:scale-105"
+          style={{
+            background: 'var(--gradient-primary)',
+            boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)',
+          }}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          Yeni Müşteri
+        </button>
       </div>
 
       {/* Stats */}
@@ -258,6 +273,32 @@ export default function ClientsPage() {
           <p className="text-gray-400">
             İlk müşterinizi ekleyerek başlayın
           </p>
+        </div>
+      )}
+
+      {/* New Client Modal */}
+      {showNewClientForm && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          onClick={() => setShowNewClientForm(false)}
+        >
+          <div
+            className="max-w-2xl w-full rounded-2xl p-8"
+            style={{
+              backgroundColor: 'var(--color-bg-card)',
+              boxShadow: 'var(--shadow-xl)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <NewClientForm
+              onSuccess={() => {
+                setShowNewClientForm(false);
+                fetchClients();
+              }}
+              onCancel={() => setShowNewClientForm(false)}
+            />
+          </div>
         </div>
       )}
     </div>
