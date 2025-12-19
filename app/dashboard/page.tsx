@@ -96,10 +96,10 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+            <h1 className="text-3xl font-bold mb-2 text-white">
               Projeler
             </h1>
-            <p style={{ color: 'var(--color-text-secondary)' }}>
+            <p className="text-gray-300">
               Toplam {projects.length} proje • {activeProjects.length} aktif
             </p>
           </div>

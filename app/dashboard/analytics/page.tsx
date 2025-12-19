@@ -117,8 +117,8 @@ export default function AnalyticsPage() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">📊 Analitik Dashboard</h1>
-            <p className="text-gray-600 mt-1">Proje ve müşteri istatistikleri</p>
+            <h1 className="text-3xl font-bold text-white">📊 Analitik Dashboard</h1>
+            <p className="text-gray-300 mt-1">Proje ve müşteri istatistikleri</p>
           </div>
           <button
             onClick={handleExportPDF}
@@ -176,7 +176,7 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Timeline Chart */}
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">Son 7 Gün Aktivitesi</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">Son 7 Gün Aktivitesi</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={timelineData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
@@ -191,7 +191,7 @@ export default function AnalyticsPage() {
 
           {/* Category Distribution */}
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">Kategori Dağılımı</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">Kategori Dağılımı</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -216,7 +216,7 @@ export default function AnalyticsPage() {
 
         {/* Bar Chart */}
         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <h3 className="text-lg font-semibold mb-4 text-gray-900">Durum Dağılımı</h3>
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">Durum Dağılımı</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
               data={[
