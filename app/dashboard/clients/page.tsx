@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 
@@ -172,9 +173,10 @@ export default function ClientsPage() {
       {clients.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {clients.map((client) => (
-            <div
+            <Link
               key={client.id}
-              className="rounded-2xl p-6 transition-all hover:scale-[1.02] cursor-pointer"
+              href={`/dashboard/clients/${client.id}`}
+              className="rounded-2xl p-6 transition-all hover:scale-[1.02] cursor-pointer block"
               style={{
                 backgroundColor: 'var(--color-bg-card)',
                 border: '1px solid var(--color-border)',
@@ -237,7 +239,7 @@ export default function ClientsPage() {
                   </div>
                 )}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       ) : (
