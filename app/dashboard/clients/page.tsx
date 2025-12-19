@@ -280,14 +280,15 @@ export default function ClientsPage() {
       {showNewClientForm && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
           onClick={() => setShowNewClientForm(false)}
         >
           <div
             className="max-w-2xl w-full rounded-2xl p-8"
             style={{
-              backgroundColor: 'var(--color-bg-card)',
-              boxShadow: 'var(--shadow-xl)',
+              backgroundColor: 'rgba(15, 23, 42, 0.98)',
+              border: '1px solid rgba(148, 163, 184, 0.3)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
