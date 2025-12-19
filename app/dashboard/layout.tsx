@@ -34,7 +34,7 @@ export default function DashboardLayout({
       <nav
         className="sticky top-0 z-50 backdrop-blur-md"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          backgroundColor: 'rgba(15, 23, 42, 0.9)',
           borderBottom: '1px solid var(--color-border)',
         }}
       >

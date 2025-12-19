@@ -44,21 +44,21 @@
   --color-error: #ef4444;
   --color-error-light: #fef2f2;
 
-  /* Backgrounds - Modern Gradient */
-  --color-bg: #ffffff;
-  --color-bg-warm: #f0f4ff;
-  --color-bg-card: #ffffff;
+  /* Backgrounds - Dark Premium Gradient */
+  --color-bg: #0f172a;
+  --color-bg-warm: #1e293b;
+  --color-bg-card: rgba(255, 255, 255, 0.95);
   --color-bg-elevated: #ffffff;
-  --gradient-background: linear-gradient(135deg, #f0f4ff 0%, #e0f2fe 50%, #faf5ff 100%);
+  --gradient-background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #000000 100%);
 
-  /* Text - Clear & Professional */
-  --color-text: #0f172a;
-  --color-text-secondary: #475569;
+  /* Text - Light for Dark Background */
+  --color-text: #f8fafc;
+  --color-text-secondary: #cbd5e1;
   --color-text-muted: #94a3b8;
 
-  /* Borders */
-  --color-border: #e2e8f0;
-  --color-border-light: #f1f5f9;
+  /* Borders - Dark Theme */
+  --color-border: #334155;
+  --color-border-light: #1e293b;
 
   /* Category Colors */
   --color-category-design: #8b5cf6;
