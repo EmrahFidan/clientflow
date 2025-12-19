@@ -44,11 +44,12 @@
   --color-error: #ef4444;
   --color-error-light: #fef2f2;
 
-  /* Backgrounds - Clean & Professional */
+  /* Backgrounds - Modern Gradient */
   --color-bg: #ffffff;
-  --color-bg-warm: #f8fafc;
+  --color-bg-warm: #f0f4ff;
   --color-bg-card: #ffffff;
   --color-bg-elevated: #ffffff;
+  --gradient-background: linear-gradient(135deg, #f0f4ff 0%, #e0f2fe 50%, #faf5ff 100%);
 
   /* Text - Clear & Professional */
   --color-text: #0f172a;
@@ -96,7 +97,8 @@ html {
 }
 
 body {
-  background: var(--color-bg-warm);
+  background: var(--gradient-background);
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
 }

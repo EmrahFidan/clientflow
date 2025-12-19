@@ -10,12 +10,16 @@
     "setup:auth": "node scripts/setup-auth.js"
   },
   "dependencies": {
+    "date-fns": "^3.0.6",
     "dotenv": "^16.4.5",
     "firebase": "^12.6.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.3",
     "next": "16.0.10",
     "openai": "^6.14.0",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "recharts": "^2.13.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
