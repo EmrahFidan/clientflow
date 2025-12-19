@@ -138,8 +138,8 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div>
-              <p className="text-3xl font-bold" style={{ color: 'var(--color-text)' }}>{projects.length}</p>
-              <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Toplam Proje</p>
+              <p className="text-3xl font-bold" style={{ color: '#0f172a' }}>{projects.length}</p>
+              <p className="text-sm font-medium" style={{ color: '#64748b' }}>Toplam Proje</p>
             </div>
           </div>
         </div>
@@ -162,8 +162,8 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div>
-              <p className="text-3xl font-bold" style={{ color: 'var(--color-text)' }}>{activeProjects.length}</p>
-              <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Aktif Proje</p>
+              <p className="text-3xl font-bold" style={{ color: '#0f172a' }}>{activeProjects.length}</p>
+              <p className="text-sm font-medium" style={{ color: '#64748b' }}>Aktif Proje</p>
             </div>
           </div>
         </div>
@@ -186,8 +186,8 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div>
-              <p className="text-3xl font-bold" style={{ color: 'var(--color-text)' }}>{Object.keys(clients).length}</p>
-              <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Müşteri</p>
+              <p className="text-3xl font-bold" style={{ color: '#0f172a' }}>{Object.keys(clients).length}</p>
+              <p className="text-sm font-medium" style={{ color: '#64748b' }}>Müşteri</p>
             </div>
           </div>
         </div>
@@ -201,7 +201,7 @@ export default function DashboardPage() {
               className="w-2 h-2 rounded-full"
               style={{ backgroundColor: 'var(--color-primary)' }}
             />
-            <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>
+            <h2 className="text-xl font-semibold" style={{ color: '#f8fafc' }}>
               Aktif Projeler
             </h2>
           </div>
@@ -221,7 +221,7 @@ export default function DashboardPage() {
               className="w-2 h-2 rounded-full"
               style={{ backgroundColor: 'var(--color-success)' }}
             />
-            <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>
+            <h2 className="text-xl font-semibold" style={{ color: '#f8fafc' }}>
               Tamamlanan Projeler
             </h2>
           </div>
@@ -244,10 +244,10 @@ export default function DashboardPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
+          <h3 className="text-xl font-semibold mb-2" style={{ color: '#f8fafc' }}>
             Henüz proje yok
           </h3>
-          <p className="mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="mb-6" style={{ color: '#cbd5e1' }}>
             İlk projenizi oluşturarak başlayın
           </p>
           <button

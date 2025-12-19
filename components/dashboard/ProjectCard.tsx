@@ -62,12 +62,12 @@ export default function ProjectCard({ project }: { project: Project }) {
           <div className="flex-1">
             <h3
               className="text-lg font-semibold transition-colors mb-1"
-              style={{ color: 'var(--color-text)' }}
+              style={{ color: '#0f172a' }}
             >
               {project.name}
             </h3>
             {project.clientName && (
-              <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <p className="text-sm" style={{ color: '#475569' }}>
                 {project.clientName}
               </p>
             )}
@@ -101,11 +101,11 @@ export default function ProjectCard({ project }: { project: Project }) {
         {/* Footer */}
         <div
           className="flex items-center justify-between pt-4"
-          style={{ borderTop: '1px solid var(--color-border-light)' }}
+          style={{ borderTop: '1px solid #e2e8f0' }}
         >
           <div
             className="flex items-center gap-2 text-sm"
-            style={{ color: 'var(--color-text-secondary)' }}
+            style={{ color: '#64748b' }}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -116,7 +116,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           {project.status === 'active' && (
             <div className="text-sm font-medium">
               {daysRemaining > 0 ? (
-                <span style={{ color: 'var(--color-text-secondary)' }}>{daysRemaining} gün</span>
+                <span style={{ color: '#64748b' }}>{daysRemaining} gün</span>
               ) : (
                 <span style={{ color: 'var(--color-accent)' }}>Süre geçti!</span>
               )}
@@ -126,7 +126,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           {project.updatesCount !== undefined && (
             <div
               className="flex items-center gap-1.5 text-sm"
-              style={{ color: 'var(--color-text-secondary)' }}
+              style={{ color: '#64748b' }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
